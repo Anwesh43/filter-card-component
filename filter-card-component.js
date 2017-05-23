@@ -72,4 +72,19 @@ class FilterCardComponent extends HTMLElement{
         }
     }
 }
+class CircularFilterCardComponent extends FilterCardComponent {
+    constructor() {
+        super()
+    }
+    connectedCallback() {
+        super.connectedCallback()
+    }
+    defineShape(context,w,h) {
+        const r = Math.min(w,h)/2
+        context.beginPath()
+        context.arc(w/2,h/2,r,0,2*Math.PI)
+        context.clip()
+    }
+}
 customElements.define('filter-card',FilterCardComponent)
+customElements.define('circular-filter-card',CircularFilterCardComponent)
