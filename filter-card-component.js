@@ -10,28 +10,32 @@ class FilterCardComponent extends HTMLElement{
     }
     defineShape(context,w,h) {
     }
-    draw(w,h) {
+    draw() {
+        const w = this.image.width
+        const h = this.image.height
         const canvas = document.createElement('canvas')
         canvas.width = window.innerWidth/5
         canvas.height = canvas.width*(h/w)
         const context = canvas.getContext('2d')
         context.save()
-        context.beginPath()
-        this.defineShape(contet,canvas.width,canvas.height)
+
+        this.defineShape(context,canvas.width,canvas.height)
         context.drawImage(this.image,0,0,canvas.width,canvas.height)
         context.fillStyle = this.color
         context.globalAlpha = 0.5
-        context.fillRect(0,0,canvas.width,this.h)
+        context.fillRect(0,0,canvas.width,this.state.h)
         context.restore()
         if(!this.state.maxH) {
             this.state.maxH = canvas.height
         }
+        this.img.src = canvas.toDataURL()
     }
     startAnimating() {
         const dir = this.state.dir
         const h = this.state.h
         const maxH = this.state.maxH
         if(dir == 0) {
+
             if(h>=maxH) {
                 this.state.dir = -1
             }
@@ -39,6 +43,7 @@ class FilterCardComponent extends HTMLElement{
                 this.state.dir = 1
             }
             const interval = setInterval(()=>{
+                this.draw()
                 this.state.h += (this.state.dir * (this.state.maxH/5))
                 if(this.state.h > this.state.maxH) {
                     this.state.h = this.state.maxH
@@ -51,14 +56,19 @@ class FilterCardComponent extends HTMLElement{
                 if(this.state.dir == 0) {
                     clearInterval(interval)
                 }
-            },100)
+                console.log(this.state.h)
+                console.log(this.state.maxH)
+            },50)
         }
     }
     connectedCallback() {
-        const image = new Image()
-        image.src = this.src
-        image.onload = () => {
-            this.draw(image.width,image.height)
+        this.image = new Image()
+        this.image.src = this.src
+        this.image.onload = () => {
+            this.draw()
+        }
+        this.img.onmousedown = () => {
+            this.startAnimating()
         }
     }
 }
