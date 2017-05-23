@@ -86,5 +86,23 @@ class CircularFilterCardComponent extends FilterCardComponent {
         context.clip()
     }
 }
+
+class TriangularFilterCardComponent extends FilterCardComponent {
+    constructor() {
+        super()
+    }
+    connectedCallback() {
+        super.connectedCallback()
+    }
+    defineShape(context,w,h) {
+        const r = Math.min(w,h)/2
+        context.beginPath()
+        context.moveTo(w/2,0)
+        context.lineTo(w,h)
+        context.lineTo(0,h)
+        context.clip()
+    }
+}
 customElements.define('filter-card',FilterCardComponent)
 customElements.define('circular-filter-card',CircularFilterCardComponent)
+customElements.define('triangular-filter-card',TriangularFilterCardComponent)
